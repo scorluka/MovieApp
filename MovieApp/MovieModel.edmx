@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="MovieModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Actor">
+          <Key>
+            <PropertyRef Name="Actor_ID" />
+          </Key>
+          <Property Name="Actor_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Movie">
+          <Key>
+            <PropertyRef Name="Movie_ID" />
+          </Key>
+          <Property Name="Movie_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Cover_img" Type="varbinary(max)" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="Release_date" Type="date" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Movie.dbo.Movie_cast' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Movie_cast">
+          <Key>
+            <PropertyRef Name="Actor_ID" />
+            <PropertyRef Name="Movie_ID" />
+            <PropertyRef Name="Cast" />
+          </Key>
+          <Property Name="Actor_ID" Type="int" Nullable="false" />
+          <Property Name="Movie_ID" Type="int" Nullable="false" />
+          <Property Name="Cast" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Actor_Actor">
+          <End Role="Actor" Type="Self.Actor" Multiplicity="1" />
+          <End Role="Actor1" Type="Self.Actor" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Actor">
+              <PropertyRef Name="Actor_ID" />
+            </Principal>
+            <Dependent Role="Actor1">
+              <PropertyRef Name="Actor_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MovieModelStoreContainer">
+          <EntitySet Name="Actor" EntityType="Self.Actor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Movie" EntityType="Self.Movie" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Movie_cast" EntityType="Self.Movie_cast" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Movie_cast].[Actor_ID] AS [Actor_ID], 
+    [Movie_cast].[Movie_ID] AS [Movie_ID], 
+    [Movie_cast].[Cast] AS [Cast]
+    FROM [dbo].[Movie_cast] AS [Movie_cast]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Actor_Actor" Association="Self.FK_Actor_Actor">
+            <End Role="Actor" EntitySet="Actor" />
+            <End Role="Actor1" EntitySet="Actor" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MovieModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Actor">
+          <Key>
+            <PropertyRef Name="Actor_ID" />
+          </Key>
+          <Property Name="Actor_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Actor1" Relationship="Self.FK_Actor_Actor" FromRole="Actor" ToRole="Actor1" />
+          <NavigationProperty Name="Actor2" Relationship="Self.FK_Actor_Actor" FromRole="Actor1" ToRole="Actor" />
+        </EntityType>
+        <EntityType Name="Movie">
+          <Key>
+            <PropertyRef Name="Movie_ID" />
+          </Key>
+          <Property Name="Movie_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Cover_img" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Release_date" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="Movie_cast">
+          <Key>
+            <PropertyRef Name="Actor_ID" />
+            <PropertyRef Name="Movie_ID" />
+            <PropertyRef Name="Cast" />
+          </Key>
+          <Property Name="Actor_ID" Type="Int32" Nullable="false" />
+          <Property Name="Movie_ID" Type="Int32" Nullable="false" />
+          <Property Name="Cast" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Actor_Actor">
+          <End Role="Actor" Type="Self.Actor" Multiplicity="1" />
+          <End Role="Actor1" Type="Self.Actor" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Actor">
+              <PropertyRef Name="Actor_ID" />
+            </Principal>
+            <Dependent Role="Actor1">
+              <PropertyRef Name="Actor_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MovieContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Actors" EntityType="Self.Actor" />
+          <EntitySet Name="Movies" EntityType="Self.Movie" />
+          <EntitySet Name="Movie_cast" EntityType="Self.Movie_cast" />
+          <AssociationSet Name="FK_Actor_Actor" Association="Self.FK_Actor_Actor">
+            <End Role="Actor" EntitySet="Actors" />
+            <End Role="Actor1" EntitySet="Actors" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MovieModelStoreContainer" CdmEntityContainer="MovieContext">
+          <EntitySetMapping Name="Actors">
+            <EntityTypeMapping TypeName="MovieModel.Actor">
+              <MappingFragment StoreEntitySet="Actor">
+                <ScalarProperty Name="Actor_ID" ColumnName="Actor_ID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Movies">
+            <EntityTypeMapping TypeName="MovieModel.Movie">
+              <MappingFragment StoreEntitySet="Movie">
+                <ScalarProperty Name="Movie_ID" ColumnName="Movie_ID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Cover_img" ColumnName="Cover_img" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Release_date" ColumnName="Release_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Movie_cast">
+            <EntityTypeMapping TypeName="MovieModel.Movie_cast">
+              <MappingFragment StoreEntitySet="Movie_cast">
+                <ScalarProperty Name="Actor_ID" ColumnName="Actor_ID" />
+                <ScalarProperty Name="Movie_ID" ColumnName="Movie_ID" />
+                <ScalarProperty Name="Cast" ColumnName="Cast" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

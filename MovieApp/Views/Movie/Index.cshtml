@@ -1,0 +1,52 @@
+﻿@model IEnumerable<MovieApp.Movie>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Top 10 rated movies</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            Cover Image
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            Release Date
+        </th>
+        
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @{ 
+                var base64 = Convert.ToBase64String(item.Cover_img);
+                var imgsrc = string.Format("data:image/jpg;base64, {0}", base64);
+            }
+            <img src='@imgsrc' height="100" width="100"/>
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @{ 
+                var dateAndTime = item.Release_date;
+                var date = dateAndTime.ToShortDateString();
+            }
+            @date
+        </td>
+        
+    </tr>
+}
+
+</table>
