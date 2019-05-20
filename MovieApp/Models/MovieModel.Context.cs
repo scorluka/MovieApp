@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MovieApp
+namespace MovieApp.Models
 {
     using System;
     using System.Data.Entity;
@@ -27,6 +27,9 @@ namespace MovieApp
     
         public virtual DbSet<Actor> Actors { get; set; }
         public virtual DbSet<Movie> Movies { get; set; }
+        public virtual DbSet<MovieComment> MovieComments { get; set; }
+        public virtual DbSet<TvShowComment> TvShowComments { get; set; }
+        public virtual DbSet<TvShow> TvShows { get; set; }
         public virtual DbSet<Movie_cast> Movie_cast { get; set; }
     }
 }

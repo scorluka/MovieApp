@@ -27,6 +27,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TypeScriptToolsVersion>2.1</TypeScriptToolsVersion>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -148,36 +149,48 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actor.cs">
-      <DependentUpon>MovieModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MovieController.cs" />
+    <Compile Include="Controllers\RatingController.cs" />
+    <Compile Include="Controllers\TvShowsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Movie.cs">
+    <Compile Include="Models\Actor.cs">
       <DependentUpon>MovieModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="MovieModel.Context.cs">
+    <Compile Include="Models\DetailsViewModel.cs" />
+    <Compile Include="Models\Movie.cs">
+      <DependentUpon>MovieModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MovieComment.cs">
+      <DependentUpon>MovieModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MovieModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MovieModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="MovieModel.cs">
+    <Compile Include="Models\MovieModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MovieModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="MovieModel.Designer.cs">
+    <Compile Include="Models\MovieModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MovieModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Movie_cast.cs">
+    <Compile Include="Models\Movie_cast.cs">
+      <DependentUpon>MovieModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TvShow.cs">
+      <DependentUpon>MovieModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TvShowComment.cs">
       <DependentUpon>MovieModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -187,6 +200,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Site1.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -194,12 +208,35 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="MovieModel.Context.tt">
+    <Content Include="Images\avengers.jpg" />
+    <Content Include="Images\bad.jpg" />
+    <Content Include="Images\band.jpg" />
+    <Content Include="Images\basterds.jpg" />
+    <Content Include="Images\den.jpg" />
+    <Content Include="Images\fargo.jpg" />
+    <Content Include="Images\focus.jpg" />
+    <Content Include="Images\friends.jpg" />
+    <Content Include="Images\gamenight.jpg" />
+    <Content Include="Images\inception.jpg" />
+    <Content Include="Images\narcos.jpg" />
+    <Content Include="Images\peaky.jpg" />
+    <Content Include="Images\planet.jpg" />
+    <Content Include="Images\pulp.jpg" />
+    <Content Include="Images\red.jpg" />
+    <Content Include="Images\searching.jpg" />
+    <Content Include="Images\sherlock.jpg" />
+    <Content Include="Images\shutter.jpg" />
+    <Content Include="Images\spiderman.jpg" />
+    <Content Include="Images\StarFade.gif" />
+    <Content Include="Images\StarGlow.gif" />
+    <Content Include="Images\true.jpg" />
+    <Content Include="Images\westworld.jpg" />
+    <Content Include="Models\MovieModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>MovieModel.edmx</DependentUpon>
       <LastGenOutput>MovieModel.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="MovieModel.tt">
+    <Content Include="Models\MovieModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>MovieModel.edmx</DependentUpon>
       <LastGenOutput>MovieModel.cs</LastGenOutput>
@@ -217,11 +254,11 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <EntityDeploy Include="MovieModel.edmx">
+    <EntityDeploy Include="Models\MovieModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>MovieModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="MovieModel.edmx.diagram">
+    <Content Include="Models\MovieModel.edmx.diagram">
       <DependentUpon>MovieModel.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
@@ -269,10 +306,21 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Movie\Index.cshtml" />
+    <Content Include="Views\Movie\Details.cshtml" />
+    <Content Include="Views\TvShows\Index.cshtml" />
+    <Content Include="Views\TvShows\Details.cshtml" />
+    <Content Include="Views\Movie\Delete.cshtml" />
+    <Content Include="Views\TvShows\Delete.cshtml" />
+    <Content Include="Views\Shared\_CommentBox.cshtml" />
+    <Content Include="Views\Movie\Create.cshtml" />
+    <Content Include="Views\TvShows\Create.cshtml" />
+    <Content Include="Views\Movie\Edit.cshtml" />
+    <Content Include="Views\TvShows\Edit.cshtml" />
+    <Content Include="Views\Shared\_TvCommentBox.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
+    <Folder Include="Views\Rating\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

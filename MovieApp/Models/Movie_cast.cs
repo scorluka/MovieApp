@@ -7,18 +7,15 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MovieApp
+namespace MovieApp.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Actor
+    public partial class Movie_cast
     {
         public int Actor_ID { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-    
-        public virtual Actor Actor1 { get; set; }
-        public virtual Actor Actor2 { get; set; }
+        public int Movie_ID { get; set; }
+        public string Cast { get; set; }
     }
 }

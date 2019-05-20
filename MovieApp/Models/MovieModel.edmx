@@ -19,7 +19,7 @@
           </Key>
           <Property Name="Movie_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Cover_img" Type="varbinary(max)" Nullable="false" />
+          <Property Name="Cover_img" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Description" Type="nvarchar" MaxLength="300" Nullable="false" />
           <Property Name="Release_date" Type="date" Nullable="false" />
         </EntityType>
@@ -34,6 +34,34 @@ warning 6002: The table/view 'Movie.dbo.Movie_cast' does not have a primary key 
           <Property Name="Actor_ID" Type="int" Nullable="false" />
           <Property Name="Movie_ID" Type="int" Nullable="false" />
           <Property Name="Cast" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MovieComments">
+          <Key>
+            <PropertyRef Name="CommentId" />
+          </Key>
+          <Property Name="CommentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Comments" Type="nvarchar" MaxLength="500" />
+          <Property Name="Rating" Type="int" />
+          <Property Name="MovieId" Type="int" />
+        </EntityType>
+        <EntityType Name="TvShowComments">
+          <Key>
+            <PropertyRef Name="TvCommentId" />
+          </Key>
+          <Property Name="TvCommentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TvComments" Type="nvarchar" MaxLength="500" />
+          <Property Name="TvRating" Type="int" />
+          <Property Name="TvShowId" Type="int" />
+        </EntityType>
+        <EntityType Name="TvShows">
+          <Key>
+            <PropertyRef Name="TvShow_ID" />
+          </Key>
+          <Property Name="TvShow_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="TvCoverImg" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="Release_date" Type="date" Nullable="false" />
         </EntityType>
         <Association Name="FK_Actor_Actor">
           <End Role="Actor" Type="Self.Actor" Multiplicity="1" />
@@ -50,6 +78,9 @@ warning 6002: The table/view 'Movie.dbo.Movie_cast' does not have a primary key 
         <EntityContainer Name="MovieModelStoreContainer">
           <EntitySet Name="Actor" EntityType="Self.Actor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Movie" EntityType="Self.Movie" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MovieComments" EntityType="Self.MovieComments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TvShowComments" EntityType="Self.TvShowComments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TvShows" EntityType="Self.TvShows" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Movie_cast" EntityType="Self.Movie_cast" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [Movie_cast].[Actor_ID] AS [Actor_ID], 
@@ -83,7 +114,35 @@ warning 6002: The table/view 'Movie.dbo.Movie_cast' does not have a primary key 
           </Key>
           <Property Name="Movie_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Cover_img" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="Cover_img" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Release_date" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="MovieComment">
+          <Key>
+            <PropertyRef Name="CommentId" />
+          </Key>
+          <Property Name="CommentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Comments" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Rating" Type="Int32" />
+          <Property Name="MovieId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="TvShowComment">
+          <Key>
+            <PropertyRef Name="TvCommentId" />
+          </Key>
+          <Property Name="TvCommentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TvComments" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="TvRating" Type="Int32" />
+          <Property Name="TvShowId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="TvShow">
+          <Key>
+            <PropertyRef Name="TvShow_ID" />
+          </Key>
+          <Property Name="TvShow_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TvCoverImg" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Release_date" Type="DateTime" Nullable="false" Precision="0" />
         </EntityType>
@@ -112,6 +171,9 @@ warning 6002: The table/view 'Movie.dbo.Movie_cast' does not have a primary key 
         <EntityContainer Name="MovieContext" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Actors" EntityType="Self.Actor" />
           <EntitySet Name="Movies" EntityType="Self.Movie" />
+          <EntitySet Name="MovieComments" EntityType="Self.MovieComment" />
+          <EntitySet Name="TvShowComments" EntityType="Self.TvShowComment" />
+          <EntitySet Name="TvShows" EntityType="Self.TvShow" />
           <EntitySet Name="Movie_cast" EntityType="Self.Movie_cast" />
           <AssociationSet Name="FK_Actor_Actor" Association="Self.FK_Actor_Actor">
             <End Role="Actor" EntitySet="Actors" />
@@ -139,6 +201,37 @@ warning 6002: The table/view 'Movie.dbo.Movie_cast' does not have a primary key 
                 <ScalarProperty Name="Movie_ID" ColumnName="Movie_ID" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Cover_img" ColumnName="Cover_img" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Release_date" ColumnName="Release_date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MovieComments">
+            <EntityTypeMapping TypeName="MovieModel.MovieComment">
+              <MappingFragment StoreEntitySet="MovieComments">
+                <ScalarProperty Name="CommentId" ColumnName="CommentId" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="MovieId" ColumnName="MovieId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TvShowComments">
+            <EntityTypeMapping TypeName="MovieModel.TvShowComment">
+              <MappingFragment StoreEntitySet="TvShowComments">
+                <ScalarProperty Name="TvCommentId" ColumnName="TvCommentId" />
+                <ScalarProperty Name="TvComments" ColumnName="TvComments" />
+                <ScalarProperty Name="TvRating" ColumnName="TvRating" />
+                <ScalarProperty Name="TvShowId" ColumnName="TvShowId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TvShows">
+            <EntityTypeMapping TypeName="MovieModel.TvShow">
+              <MappingFragment StoreEntitySet="TvShows">
+                <ScalarProperty Name="TvShow_ID" ColumnName="TvShow_ID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="TvCoverImg" ColumnName="TvCoverImg" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Release_date" ColumnName="Release_date" />
               </MappingFragment>

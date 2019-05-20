@@ -1,0 +1,117 @@
+﻿@model MovieApp.Models.TvShow
+
+@{
+    ViewBag.Title = "Details";
+}
+@{
+
+    ViewBag.Title = Model.Title;
+    var comments = (IEnumerable<MovieApp.Models.TvShowComment>)ViewBag.Comments;
+    var ratingSum = ViewBag.RatingSum;
+    var ratingCount = ViewBag.RatingCount;
+
+    decimal rating = 0;
+    if (ratingCount > 0)
+    {
+        rating = (ratingSum / ratingCount);
+    }
+    var totalRating = decimal.Parse(rating.ToString());
+    ViewBag.rating = rating;
+
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>@Model.Title TvShow</h4>
+    <div class="row">
+        <div class="col-md-2">
+            <span class="starFadeN" id="sRate1"></span><span class="starFadeN" id="sRate2"></span><span class="starFadeN" id="sRate3"></span><span class="starFadeN" id="sRate4"></span><span class="starFadeN" id="sRate5"></span>
+        </div>
+        <div class="col-md-1"><label style="font-size:23px">(@ViewBag.rating)@ViewBag.RatingCount</label></div>
+    </div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt>
+            Cover Image
+        </dt>
+
+        <dd>
+            <img src="@Url.Content(Model.TvCoverImg)" alt="Image" height="150" width="130" />
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            Release Date
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Release_date)
+        </dd>
+
+    </dl>
+</div>
+@if (Model == null)
+{
+    <span>No Items found</span>
+}
+else
+{
+    foreach (var c in comments)
+    {
+        <hr />
+        <div class="row">
+            <div class="col-md-3 col-md-9">
+                <br />
+                @for (var i = 1; i <= c.TvRating; i++)
+                {
+                    <span class="starGlowN"></span>
+                }
+                @for (var i = (c.TvRating + 1); i <= 5; i++)
+                {
+                    <span class="starFadeN"></span>
+                }
+            </div>
+            <div class="col-md-8">
+                @Html.Raw(c.TvComments.Replace("\n", "<br />"))
+
+            </div>
+        </div>
+    }
+}
+<hr />
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.TvShow_ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+<hr />
+<link rel="stylesheet" type="text/css" href="~/Content/Site1.css">
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<dt>
+    @Html.Partial("_TvCommentBox", Model)
+</dt>
+<script>
+    function SCRate() {
+        for (var i = 1; i <= @totalRating; i++) {
+            $("#sRate" + i).attr('class', 'starGlowN');
+        }
+    }
+    $(function(){
+        SCRate();
+    });
+</script>

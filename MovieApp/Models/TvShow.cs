@@ -7,15 +7,20 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MovieApp
+namespace MovieApp.Models
 {
     using System;
     using System.Collections.Generic;
-    
-    public partial class Movie_cast
+    using System.ComponentModel.DataAnnotations;
+
+    public partial class TvShow
     {
-        public int Actor_ID { get; set; }
-        public int Movie_ID { get; set; }
-        public string Cast { get; set; }
+        public int TvShow_ID { get; set; }
+        public string Title { get; set; }
+        public string TvCoverImg { get; set; }
+        public string Description { get; set; }
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
+        public DateTime Release_date { get; set; }
+        
     }
 }

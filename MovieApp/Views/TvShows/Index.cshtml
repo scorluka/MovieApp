@@ -1,12 +1,12 @@
-﻿@model IEnumerable<MovieApp.Models.Movie>
+﻿@model IEnumerable<MovieApp.Models.TvShow>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Top 10 rated Movies</h2>
-<a class="popup btn btn-primary" href="/Movie/Create/0" style="margin-bottom:20px; margin-top:20px;">Add New Movie</a>
-<table id="movie_table" class="display table table-bordered" width="1200">
+<h2>Top 10 rated TvShows</h2>
+<a class="popup btn btn-primary" href="/Tvshows/Create/0" style="margin-bottom:20px; margin-top:20px;">Add New TvShow</a>
+<table id="tvshow_table" class="display table table-bordered">
     <thead>
         <tr>
             <th>
@@ -29,6 +29,7 @@
             </th>
         </tr>
     </thead>
+
 </table>
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.css">
@@ -42,9 +43,9 @@
     <script type="text/javascript" charset="utf8" src="https://momentjs.com/downloads/moment.js"></script>
     <script>
         $(document).ready(function () {
-            $('#movie_table').DataTable({
+            $('#tvshow_table').DataTable({
                 "ajax": {
-                    "url": "/Movie/Loaddata",
+                    "url": "/TvShows/Loaddata",
                     "type": "GET",
                     "datatype": "json"
                 },
@@ -52,7 +53,7 @@
 
                     { "data": "Title", },
                     {
-                        "data": "Cover_img",
+                        "data": "TvCoverImg",
                         "render": function (data, type, row) {
                             return '<img src="' + data + '" style="height:130px;width:130px;" />';
                         }
@@ -66,18 +67,17 @@
                         }
                     },
                     {
-                        "data": "Movie_ID", "width": "50px", "render": function (data) {
-                            return '<a class="popup" href="/Movie/Details/' + data + '">Details</a>';
+                        "data": "TvShow_ID", "width": "50px", "render": function (data) {
+                            return '<a class="popup" href="/Tvshows/Details/' + data + '">Details</a>';
                         }
                     },
                     {
-                        "data": "Movie_ID", "width": "50px", "render": function (data) {
-                            return '<a class="popup" href="/Movie/Delete/' + data + '">Delete</a>';
+                        "data": "TvShow_ID", "width": "50px", "render": function (data) {
+                            return '<a class="popup" href="/TvShows/Delete/' + data + '">Delete</a>';
                         }
                     }
                 ]
             });
         });
     </script>
-
 }

@@ -1,51 +1,50 @@
 ﻿using MovieApp.Models;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using System.Data;
+using System.Net;
 
 namespace MovieApp.Controllers
 {
-    public class MovieController : Controller
+    public class TvShowsController : Controller
     {
         MovieContext db = new MovieContext();
 
-        // GET: Movie
+        // GET: TvShows
         public ActionResult Index()
         {
             return View();
         }
+
         public ActionResult Loaddata()
         {
-            var movList = db.Movies.ToList<Movie>();
-            return Json(new { data = movList }, JsonRequestBehavior.AllowGet);
+            var tvshowList = db.TvShows.ToList<TvShow>();
+            return Json(new { data = tvshowList }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Details(int? id)
         {
-            
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Movie movie = db.Movies.Find(id);
-            if (movie == null)
+            TvShow tvShow = db.TvShows.Find(id);
+            if (tvShow == null)
             {
-               return HttpNotFound();
+                return HttpNotFound();
             }
-            ViewBag.MovieId = id.Value;
+            ViewBag.TvShowId = id.Value;
 
-            var comments = db.MovieComments.Where(d => d.MovieId == (id.Value)).ToList();
+            var comments = db.TvShowComments.Where(d => d.TvShowId == (id.Value)).ToList();
             ViewBag.Comments = comments;
 
-            var ratings = db.MovieComments.Where(d => d.MovieId == (id.Value)).ToList();
+            var ratings = db.TvShowComments.Where(d => d.TvShowId == (id.Value)).ToList();
             if (ratings.Count() > 0)
             {
-                var ratingSum = ratings.Sum(d => d.Rating.Value);
+                var ratingSum = ratings.Sum(d => d.TvRating.Value);
                 ViewBag.RatingSum = ratingSum;
                 var ratingCount = ratings.Count();
                 ViewBag.RatingCount = ratingCount;
@@ -55,8 +54,9 @@ namespace MovieApp.Controllers
                 ViewBag.RatingSum = 0;
                 ViewBag.RatingCount = 0;
             }
-            
-            return View(movie);
+
+            return View(tvShow);
+
         }
 
         [HttpPost]
@@ -64,20 +64,20 @@ namespace MovieApp.Controllers
         public ActionResult Add(FormCollection form)
         {
             var comment = form["Comment"].ToString();
-            var movieid = Convert.ToInt32(form["Movie_ID"]);
+            var tvshowid = Convert.ToInt32(form["TvShow_ID"]);
             var rating = Convert.ToInt32(form["Rating"]);
 
-            MovieComment movComment = new MovieComment()
+            TvShowComment tvComment = new TvShowComment()
             {
-                MovieId = movieid,
-                Comments = comment,
-                Rating = rating, 
+                TvShowId = tvshowid,
+                TvComments = comment,
+                TvRating = rating,
             };
 
-            db.MovieComments.Add(movComment);
+            db.TvShowComments.Add(tvComment);
             db.SaveChanges();
 
-            return RedirectToAction("Details", "Movie", new { id = movieid });
+            return RedirectToAction("Details", "Tvshows", new { id = tvshowid });
         }
 
         [HttpGet]
@@ -87,18 +87,18 @@ namespace MovieApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Movie movie)
+        public ActionResult Create(TvShow tvshow)
         {
             try
             {
                 // TODO: Add insert logic here
                 if (ModelState.IsValid)
                 {
-                    db.Movies.Add(movie);
+                    db.TvShows.Add(tvshow);
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-                return View(movie);
+                return View(tvshow);
             }
             catch
             {
@@ -110,24 +110,24 @@ namespace MovieApp.Controllers
         {
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            Movie movie = db.Movies.Find(id);
-            if (movie == null)
+            TvShow tvshow = db.TvShows.Find(id);
+            if (tvshow == null)
                 return HttpNotFound();
-            return View(movie);
+            return View(tvshow);
         }
         [HttpPost]
-        public ActionResult Edit(Movie movie)
+        public ActionResult Edit(TvShow tvshow)
         {
             try
             {
                 // TODO: Add update logic here
                 if (ModelState.IsValid)
                 {
-                    db.Entry(movie).State = System.Data.Entity.EntityState.Modified;
+                    db.Entry(tvshow).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Details","Tvshows", new {id = tvshow.TvShow_ID });
                 }
-                return View(movie);
+                return View(tvshow);
             }
             catch
             {
@@ -139,31 +139,31 @@ namespace MovieApp.Controllers
         {
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            Movie movie = db.Movies.Find(id);
-            if (movie == null)
+            TvShow tvshow = db.TvShows.Find(id);
+            if (tvshow == null)
                 return HttpNotFound();
 
-            return View(movie);
+            return View(tvshow);
         }
         [HttpPost]
-        public ActionResult Delete(int? id, Movie mov)
+        public ActionResult Delete(int? id, TvShow tvsho)
         {
             try
             {
-                Movie movie = new Movie();
+                TvShow tvshow = new TvShow();
                 if (ModelState.IsValid)
                 {
                     if (id == null)
                         return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-                    movie = db.Movies.Find(id);
-                    if (movie == null)
+                    tvshow = db.TvShows.Find(id);
+                    if (tvshow == null)
                         return HttpNotFound();
 
-                    db.Movies.Remove(movie);
+                    db.TvShows.Remove(tvshow);
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
-                return View(movie);
+                return View(tvshow);
             }
             catch
             {
